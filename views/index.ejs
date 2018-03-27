@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tester Mctestyson</title>
+    <link href="<%= static_path + "/bootstrap/css/theme/" + theme + "/bootstrap.css" %>" rel="stylesheet">
+    <!-- Custom styles for this template -->
+    <link href="<%= static_path + "/bootstrap/css/jumbotron-narrow.css" %>" rel="stylesheet">
+  </head>
+  <body>
+
+    <div class="container">
+      <div class="header">
+        <ul class="nav nav-pills pull-right">
+          <li class="active"><a href="#">Home</a></li>
+        </ul>
+        <h3 class="text-muted">Tester Mctestyson</h3>
+      </div>
+      <div id="testSuccess" class="alert alert-success" style="display:none">
+        <p id="testSuccessText"></p>
+      </div>
+      <div id="testError" class="alert alert-danger" style="display:none">
+        <p id="testErrorText">Well this is embarrassing but it looks like this is still broken</p>
+      </div>
+      <div class="jumbotron">
+        <h1>Tester Mctestyson</h1>
+        <p><a class="btn btn-lg btn-success"  data-toggle="modal" href="#testModal">Click to Test!</a></p>
+      </div>
+
+
+      <div class="footer">
+        <p>&copy; Tester Mctestyson</p>
+      </div>
+
+      <!-- Modal -->
+       <div class="modal fade" id="testModal" tabindex="-1" role="dialog" aria-labelledby="testModal" aria-hidden="true">
+         <div class="modal-dialog">
+           <div class="modal-content">
+             <div class="modal-header">
+               <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+             </div>
+             <div class="modal-body">
+               <form id="testForm" role="form">
+                 <input type="hidden" id="theme" name="theme" value="<%= theme %>"/>
+                 <div class="form-group">
+                   <label for="name">Test</label>
+                   <input type="text" class="form-control" id="name" name="name" placeholder="Type Something">
+                 </div>
+             </div>
+             <div class="modal-footer">
+               <button id="test" type="button" class="btn btn-primary">Test!</button>
+             </div>
+           </div><!-- /.modal-content -->
+         </div><!-- /.modal-dialog -->
+       </div><!-- /.modal -->
+
+    </div> <!-- /container -->
+
+    <script src="<%= static_path + "/jquery/jquery-1.11.3.min.js" %>"></script>
+    <script src="<%= static_path + "/bootstrap/js/bootstrap.min.js" %>"></script>
+    <script type="text/javascript">
+    $(document).ready(function() {
+      $("#test").click(function() {
+        $.post( "/test", $("#testForm").serialize(),
+                function(data) {
+                  console.log(data)
+                  $("#testSuccess").show();
+                  $("#testSuccessText").text('The hased thing you said is: ' + data.message);
+                }
+              )
+              .error(function(xhr) {
+                  $("#testError").show();
+              })
+              .always(function() {
+                $("#testModal").modal('hide');
+              });
+      })
+    })
+    </script>
+  </body>
+</html>
